@@ -34,7 +34,6 @@ const listPokemon = (pokemon) => {
 
 const selectOponent = (heroId) => {
   const remainingPokemons = pokemonsList.filter(({ id }) => id !== heroId);
-
   return remainingPokemons[
     Math.floor(Math.random() * remainingPokemons.length)
   ];
@@ -48,35 +47,31 @@ const loadImage = (url) => {
   });
 };
 
-const runBattle = (hero, oponent, next) => {
-  if (next === oponent) {
-    const damage = (oponent.attack / hero.defense) * Math.random() * 200;
-    if (damage > 0) {
-      hero.currentHP -= damage;
-      return next;
-    }
-  } else {
-    const damage = (hero.attack / oponent.defense) * Math.random() * 200;
-    if (damage > 0) {
-      oponent.currentHP -= damage;
-      return next;
-    }
-  }
+const drawHP = (ctx) => {
+  ctx.strokeStyle = "#32CD32";
+  ctx.beginPath();
+  ctx.moveTo(30, 30);
+  ctx.lineTo(80, 30);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(200, 30);
+  ctx.lineTo(250, 30);
+  ctx.stroke();
 };
 
 export const displayBattle = (heroId) => {
   const canvas = document.createElement("canvas");
   canvas.setAttribute("id", "battle");
   const ctx = canvas.getContext("2d");
-
   const hero = pokemonsList[heroId];
   let heroSprite;
-  let x1 = 10;
-  let y1 = 50;
+  let x1;
+  let y1;
   const oponent = selectOponent(heroId);
   let oponentSprite;
-  let x2 = 180;
-  let y2 = 50;
+  let x2;
+  let y2;
+
   Promise.all([
     loadImage(hero.backSprite),
     loadImage(oponent.frontSprite),
@@ -89,7 +84,22 @@ export const displayBattle = (heroId) => {
   let next = hero.speed > oponent.speed ? hero : oponent;
 
   const startFight = () => {
-    if (hero.currentHP < 0 || oponent.currentHP < 0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillText(hero.name, 30, 20);
+    ctx.fillText(oponent.name, 200, 20);
+    drawHP(ctx);
+    x1 = 10;
+    y1 = 50;
+    x2 = 180;
+    y2 = 50;
+    ctx.drawImage(heroSprite, x1, y1);
+    ctx.drawImage(oponentSprite, x2, y2);
+    if (hero.currentHP < 0) {
+      alert("You loose!");
+      return;
+    }
+    if (oponent.currentHP < 0) {
+      alert("You win!");
       return;
     }
     if (next === oponent) {
@@ -118,33 +128,67 @@ export const displayBattle = (heroId) => {
     }
   };
 
+  const heroBlink = () => {
+    let image = true;
+    return setInterval(() => {
+      if (image) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(oponentSprite, x2, y2);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(heroSprite, x1, y1);
+        ctx.drawImage(oponentSprite, x2, y2);
+      }
+      image = !image;
+    }, 300);
+  };
+
+  const oponentBlink = () => {
+    let image = true;
+    return setInterval(() => {
+      if (image) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(heroSprite, x1, y1);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(heroSprite, x1, y1);
+        ctx.drawImage(oponentSprite, x2, y2);
+      }
+      image = !image;
+    }, 300);
+  };
+
   const heroAttack = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillText(hero.name, 20, 10);
+    ctx.fillText(oponent.name, canvas.width / 2 + 20, 10);
     ctx.drawImage(heroSprite, x1, y1);
     ctx.drawImage(oponentSprite, x2, y2);
     x1 += 5;
     if (x1 < 100) {
       requestAnimationFrame(heroAttack);
     } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(heroSprite, 10, 50);
-      ctx.drawImage(oponentSprite, 180, 50);
-      startFight();
+      const blinking = oponentBlink();
+      setTimeout(() => {
+        clearInterval(blinking), startFight();
+      }, 2000);
     }
   };
 
   const oponentAttack = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillText(hero.name, 20, 10);
+    ctx.fillText(oponent.name, canvas.width / 2 + 20, 10);
     ctx.drawImage(heroSprite, x1, y1);
     ctx.drawImage(oponentSprite, x2, y2);
     x2 -= 5;
     if (x2 > 90) {
       requestAnimationFrame(oponentAttack);
     } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(heroSprite, 10, 50);
-      ctx.drawImage(oponentSprite, 180, 50);
-      startFight();
+      const blinking = heroBlink();
+      setTimeout(() => {
+        clearInterval(blinking), startFight();
+      }, 2000);
     }
   };
   pokemonsContainer.appendChild(canvas);
