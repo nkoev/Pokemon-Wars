@@ -24,8 +24,8 @@ ul {
 }
 
 #battle {
-  background-image: url("../../assets/images/background.jpg");
-  background-size: cover;
+  /* background-image: url("../../assets/images/background.jpg"); */
+  /* background-size: cover; */
   position: fixed;
   width: 80%;
   height: 80%;
