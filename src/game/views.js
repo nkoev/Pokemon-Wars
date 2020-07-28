@@ -3,7 +3,7 @@ import { getPokemons } from "./data-service.js";
 import { startBattle } from "./events.js";
 let pokemonsList;
 
-const listPokemon = (pokemon) => {
+export const listPokemon = (pokemon) => {
   const card = document.createElement("div");
   card.setAttribute("id", pokemon.name);
   card.setAttribute("class", "card");

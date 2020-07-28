@@ -20,3 +20,11 @@ export class Pokemon {
     this.speed = data.stats[5].base_stat;
   }
 }
+
+export const loadImage = (url) => {
+  return new Promise((fulfill, reject) => {
+    let imageObj = new Image();
+    imageObj.onload = () => fulfill(imageObj);
+    imageObj.src = url;
+  });
+};

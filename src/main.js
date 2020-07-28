@@ -1,4 +1,4 @@
-import { displayPokemons } from "./game/views.js";
+import { displayPokemons } from "./game/handlers.js";
 import { battleHandler } from "./game/handlers.js";
 import { startBattle } from "./game/events.js";
 
