@@ -26,8 +26,17 @@ ul {
 #battle {
   /* background-image: url("../../assets/images/background.jpg"); */
   /* background-size: cover; */
+  width: 30px;
+  height: 20px;
   position: fixed;
   width: 80%;
   height: 80%;
   z-index: 2;
+}
+
+#close-button {
+  font-size: x-large;
+  color: tomato;
+  position: fixed;
+  z-index: 1000;
 }

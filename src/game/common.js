@@ -19,4 +19,12 @@ export class Pokemon {
     this.specialDefense = data.stats[4].base_stat;
     this.speed = data.stats[5].base_stat;
   }
+
+  applyAttack(enemyAttack) {
+    const damage = (enemyAttack / this.defense) * Math.random() * 200;
+    if (damage > 0 && damage < this.currentHP) {
+      this.currentHP -= damage;
+    } else if (damage > 0 && damage >= this.currentHP) this.currentHP = 0;
+    return damage;
+  }
 }

@@ -12,6 +12,16 @@ export class Canvas {
     this.ctx.stroke();
   }
 
+  get width() {
+    return this.canvas.width;
+  }
+  get height() {
+    return this.canvas.height;
+  }
+  get node() {
+    return this.canvas;
+  }
+
   drawImage(image, x, y) {
     this.ctx.drawImage(image, x, y);
   }
@@ -20,7 +30,10 @@ export class Canvas {
     this.ctx.drawImage(image, x, y, this.canvas.width, this.canvas.height);
   }
 
-  insertText(text, x, y) {
+  insertText(text, x, y, color, size, align) {
+    this.ctx.textAlign = align;
+    this.ctx.font = size;
+    this.ctx.fillStyle = color;
     this.ctx.fillText(text, x, y);
   }
 

@@ -1,6 +1,7 @@
 import { displayPokemons } from "./game/handlers.js";
-import { battleHandler } from "./game/handlers.js";
-import { startBattle } from "./game/events.js";
+import { battleHandler, replayHandler } from "./game/handlers.js";
+import { battleEvent } from "./game/events.js";
+import { createCanvas } from "./game/battle1.js";
 
 displayPokemons();
-setTimeout(() => startBattle(battleHandler), 1000);
+setTimeout(() => battleEvent(battleHandler), 1000);

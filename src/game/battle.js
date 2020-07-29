@@ -1,8 +1,10 @@
 import { pokemonsContainer } from "./common.js";
+import { replayEvent } from "./events.js";
+import { battleHandler } from "./handlers.js";
 
 export class Battle {
-  constructor(hero, enemy, heroSprite, enemySprite, background, canvasService) {
-    this.canvasService = canvasService;
+  constructor(hero, enemy, heroSprite, enemySprite, background, canvas) {
+    this.canvas = canvas;
     this.hero = hero;
     this.enemy = enemy;
     this.heroSprite = heroSprite;
@@ -16,50 +18,104 @@ export class Battle {
   }
 
   displayBattle() {
-    this.canvasService.clear();
-    this.canvasService.drawBackground(this.background, 0, 0);
-    this.canvasService.drawLine(30, 30, 80, 30);
-    this.canvasService.drawLine(200, 30, 250, 30);
-    this.canvasService.insertText(this.hero.name, 30, 20);
-    this.canvasService.insertText(this.enemy.name, 200, 20);
-    this.canvasService.drawImage(this.heroSprite, this.x1, this.y1);
-    this.canvasService.drawImage(this.enemySprite, this.x2, this.y2);
+    this.canvas.clear();
+    this.canvas.drawBackground(this.background, 0, 0);
+    this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
+    this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
+    this.canvas.insertText(
+      this.hero.name,
+      this.canvas.width / 4,
+      20,
+      undefined,
+      undefined,
+      "center"
+    );
+    this.canvas.insertText(
+      this.enemy.name,
+      (this.canvas.width / 4) * 3,
+      20,
+      undefined,
+      undefined,
+      "center"
+    );
+    this.canvas.drawImage(this.heroSprite, this.x1, this.y1);
+    this.canvas.drawImage(this.enemySprite, this.x2, this.y2);
   }
 
   displayHero() {
-    this.canvasService.clear();
-    this.canvasService.drawBackground(this.background, 0, 0);
-    this.canvasService.drawLine(30, 30, 80, 30);
-    this.canvasService.insertText(this.hero.name, 30, 20);
-    this.canvasService.drawImage(this.heroSprite, this.x1, this.y1);
+    this.canvas.clear();
+    this.canvas.drawBackground(this.background, 0, 0);
+    this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
+    this.canvas.insertText(
+      this.hero.name,
+      this.canvas.width / 4,
+      20,
+      undefined,
+      undefined,
+      "center"
+    );
+    this.canvas.drawImage(this.heroSprite, this.x1, this.y1);
   }
 
   displayEnemy() {
-    this.canvasService.clear();
-    this.canvasService.drawBackground(this.background, 0, 0);
-    this.canvasService.drawLine(200, 30, 250, 30);
-    this.canvasService.insertText(this.enemy.name, 200, 20);
-    this.canvasService.drawImage(this.enemySprite, this.x2, this.y2);
+    this.canvas.clear();
+    this.canvas.drawBackground(this.background, 0, 0);
+    this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
+    this.canvas.insertText(
+      this.enemy.name,
+      (this.canvas.width / 4) * 3,
+      20,
+      undefined,
+      undefined,
+      "center"
+    );
+    this.canvas.drawImage(this.enemySprite, this.x2, this.y2);
+  }
+
+  displayResult(message) {
+    this.canvas.insertText(
+      message,
+      this.canvas.width / 2,
+      60,
+      "red",
+      "30px Arial",
+      "center"
+    );
+    const closeButton = document.createElement("button");
+    closeButton.setAttribute("id", "close-button");
+    closeButton.innerHTML = `Play Again`;
+    pokemonsContainer.appendChild(closeButton);
+    closeButton.addEventListener("click", () => this.closeBattle());
+  }
+
+  closeBattle() {
+    const parent = document.getElementById("pokemons-container");
+    const canvas = this.canvas.node;
+    const button = document.getElementById("close-button");
+    parent.removeChild(canvas);
+    parent.removeChild(button);
   }
 
   startBattle() {
-    if (this.hero.currentHP < 0) {
+    if (this.hero.currentHP === 0) {
       this.displayBattle();
-      alert("You loose!");
+      this.displayResult("You loose!");
       return;
     }
-    if (this.enemy.currentHP < 0) {
+    if (this.enemy.currentHP === 0) {
       this.displayBattle();
-      alert("You win!");
+      this.displayResult("You win!");
       return;
     }
     if (this.attacker === this.enemy) {
       console.log("enemy attack");
-      const damage =
-        (this.enemy.attack / this.hero.defense) * Math.random() * 200;
+      const damage = this.hero.applyAttack(this.enemy.attack);
       this.attacker = this.hero;
       if (damage > 0) {
         this.hero.currentHP -= damage;
+        if (this.hero.currentHP < 0) {
+          this.hero.currentHP = 0;
+        }
         console.log(this.hero.currentHP);
         this.enemyAttack();
       } else {
@@ -67,11 +123,12 @@ export class Battle {
       }
     } else {
       console.log("hero attack");
-      const damage =
-        (this.hero.attack / this.enemy.defense) * Math.random() * 200;
-      this.attacker = this.enemy;
+      const damage = this.enemy.applyAttack(this.hero.attack);
       if (damage > 0) {
         this.enemy.currentHP -= damage;
+        if (this.enemy.currentHP < 0) {
+          this.enemy.currentHP = 0;
+        }
         console.log(this.enemy.currentHP);
         this.heroAttack();
       } else {

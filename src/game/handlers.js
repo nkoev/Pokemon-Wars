@@ -34,8 +34,13 @@ export const battleHandler = (event) => {
       canvasService
     );
     battle.displayBattle();
-    setTimeout(() => battle.startBattle(), 2000);
+    setTimeout(() => battle.startBattle(), 1000);
   });
+};
+
+export const replayHandler = () => {
+  const canvas = document.getElementById("canvas");
+  document.removeChild(canvas);
 };
 
 const selectOponent = (heroId) => {
