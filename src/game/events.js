@@ -4,8 +4,3 @@ export const battleEvent = (callback) => {
     avatar.addEventListener("click", callback);
   }
 };
-
-export const replayEvent = (callback) => {
-  const replayButton = document.getElementById("replay-button");
-  replayButton.addEventListener("click", callback);
-};

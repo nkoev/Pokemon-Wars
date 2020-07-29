@@ -1,9 +1,10 @@
-import { Pokemon } from "./common.js";
+import { Pokemon } from "./pokemon.js";
+import { baseUrl } from "./common.js";
 
 export const getPokemons = async () => {
   const pokemonsList = [];
   for (let i = 1; i <= 20; i++) {
-    const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+    const pokemonData = await fetch(baseUrl + i);
     pokemonsList.push(await pokemonData.json());
   }
   return (await Promise.all(pokemonsList)).map(

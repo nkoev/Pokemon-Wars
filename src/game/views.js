@@ -7,9 +7,7 @@ export const listPokemon = (pokemon) => {
   card.setAttribute("id", pokemon.name);
   card.setAttribute("class", "card");
 
-  const sprite = document.createElement("img");
-  sprite.setAttribute("src", pokemon.frontSprite);
-  sprite.setAttribute("id", pokemon.id);
+  const sprite = pokemon.frontSprite;
   sprite.setAttribute("class", "avatar");
 
   const info = document.createElement("ul");

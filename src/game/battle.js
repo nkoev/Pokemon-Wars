@@ -1,15 +1,12 @@
 import { pokemonsContainer } from "./common.js";
-import { replayEvent } from "./events.js";
-import { battleHandler } from "./handlers.js";
 
 export class Battle {
-  constructor(hero, enemy, heroSprite, enemySprite, background, canvas) {
+  constructor(hero, enemy, canvas) {
     this.canvas = canvas;
     this.hero = hero;
     this.enemy = enemy;
-    this.heroSprite = heroSprite;
-    this.enemySprite = enemySprite;
-    this.background = background;
+    this.heroSprite = hero.backSprite;
+    this.enemySprite = enemy.frontSprite;
     this.attacker = hero.speed > enemy.speed ? hero : enemy;
     this.x1 = 10;
     this.y1 = 50;
@@ -19,7 +16,6 @@ export class Battle {
 
   displayBattle() {
     this.canvas.clear();
-    this.canvas.drawBackground(this.background, 0, 0);
     this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
     this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
     this.canvas.insertText(
@@ -44,7 +40,6 @@ export class Battle {
 
   displayHero() {
     this.canvas.clear();
-    this.canvas.drawBackground(this.background, 0, 0);
     this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
     this.canvas.insertText(
       this.hero.name,
@@ -59,7 +54,6 @@ export class Battle {
 
   displayEnemy() {
     this.canvas.clear();
-    this.canvas.drawBackground(this.background, 0, 0);
     this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
     this.canvas.insertText(
       this.enemy.name,
