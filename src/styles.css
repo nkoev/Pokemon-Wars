@@ -4,6 +4,19 @@ li {
 
 ul {
   padding: 0;
+  text-align: left;
+  color: white;
+}
+
+ul .stat-value {
+  font-family: "Fredoka One", cursive;
+}
+
+h1 {
+  display: block;
+  text-align: center;
+  color: royalblue;
+  font-family: "Fredoka One", cursive;
 }
 
 #pokemons-container {
@@ -14,13 +27,24 @@ ul {
 }
 
 .card {
-  width: 25%;
+  margin: 3%;
+  padding: 2%;
+  background-color: silver;
+  min-width: 150px;
+  width: auto;
   display: inline-block;
   text-align: center;
+  border-radius: 8px;
 }
 
-.card img {
+.sprite {
   cursor: pointer;
+  background-color: pink;
+  border-radius: 8px;
+}
+
+.sprite:hover {
+  background-color: thistle;
 }
 
 #battle {
@@ -32,9 +56,14 @@ ul {
   z-index: 2;
 }
 
-#close-button {
+#replay-button {
+  margin-top: 30%;
+  padding: 2%;
   font-size: x-large;
-  color: tomato;
+  font-family: "Fredoka One", cursive;
+  color: royalblue;
   position: fixed;
+  border-radius: 8px;
   z-index: 1000;
+  cursor: pointer;
 }

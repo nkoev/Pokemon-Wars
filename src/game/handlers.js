@@ -1,19 +1,17 @@
 import { Battle } from "./battle.js";
-import { getPokemons } from "./data-service.js";
 import { listPokemon } from "./views.js";
 import { Canvas } from "./canvas.js";
 import { pokemonsContainer, backgroundUrl } from "./common.js";
-
-let pokemonsList;
+import { getPokemons } from "./data-service.js";
 
 export const displayPokemons = async () => {
-  pokemonsList = await getPokemons();
-  pokemonsList.forEach(listPokemon);
+  (await getPokemons()).forEach(listPokemon);
 };
 
-export const battleHandler = (event) => {
+export const battleHandler = async (event) => {
+  const pokemonsList = await getPokemons();
   const hero = pokemonsList[+event.target.id];
-  const enemy = selectOponent(+event.target.id);
+  const enemy = selectOponent(+event.target.id, pokemonsList);
 
   const background = new Image();
   background.setAttribute("src", backgroundUrl);
@@ -29,7 +27,7 @@ export const battleHandler = (event) => {
   };
 };
 
-const selectOponent = (heroId) => {
+const selectOponent = (heroId, pokemonsList) => {
   const remainingPokemons = pokemonsList.filter(({ id }) => id !== heroId);
   return remainingPokemons[
     Math.floor(Math.random() * remainingPokemons.length)

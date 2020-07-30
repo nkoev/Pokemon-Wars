@@ -11,6 +11,7 @@ export class Pokemon {
     ).ability.name;
     this.moves = data.moves.map((record) => record.move.name);
     this.hp = data.stats[0].base_stat;
+    this.hpCoeff = data.stats[0].base_stat / 50;
     this.currentHP = data.stats[0].base_stat;
     this.attack = data.stats[1].base_stat;
     this.defense = data.stats[2].base_stat;

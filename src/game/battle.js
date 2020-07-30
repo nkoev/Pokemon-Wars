@@ -7,7 +7,7 @@ export class Battle {
     this.enemy = enemy;
     this.heroSprite = hero.backSprite;
     this.enemySprite = enemy.frontSprite;
-    this.attacker = hero.speed > enemy.speed ? hero : enemy;
+    this.attacker = hero.speed >= enemy.speed ? hero : enemy;
     this.x1 = 10;
     this.y1 = 50;
     this.x2 = 180;
@@ -16,8 +16,18 @@ export class Battle {
 
   displayBattle() {
     this.canvas.clear();
-    this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
-    this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
+    this.canvas.drawLine(
+      50,
+      30,
+      50 + this.hero.currentHP / this.hero.hpCoeff,
+      30
+    );
+    this.canvas.drawLine(
+      200,
+      30,
+      200 + this.enemy.currentHP / this.enemy.hpCoeff,
+      30
+    );
     this.canvas.insertText(
       this.hero.name,
       this.canvas.width / 4,
@@ -40,7 +50,12 @@ export class Battle {
 
   displayHero() {
     this.canvas.clear();
-    this.canvas.drawLine(30, 30, 30 + this.hero.currentHP, 30);
+    this.canvas.drawLine(
+      50,
+      30,
+      50 + this.hero.currentHP / this.hero.hpCoeff,
+      30
+    );
     this.canvas.insertText(
       this.hero.name,
       this.canvas.width / 4,
@@ -54,7 +69,12 @@ export class Battle {
 
   displayEnemy() {
     this.canvas.clear();
-    this.canvas.drawLine(200, 30, 200 + this.enemy.currentHP, 30);
+    this.canvas.drawLine(
+      200,
+      30,
+      200 + this.enemy.currentHP / this.enemy.hpCoeff,
+      30
+    );
     this.canvas.insertText(
       this.enemy.name,
       (this.canvas.width / 4) * 3,
@@ -75,17 +95,17 @@ export class Battle {
       "30px Arial",
       "center"
     );
-    const closeButton = document.createElement("button");
-    closeButton.setAttribute("id", "close-button");
-    closeButton.innerHTML = `Play Again`;
-    pokemonsContainer.appendChild(closeButton);
-    closeButton.addEventListener("click", () => this.closeBattle());
+    const replayButton = document.createElement("button");
+    replayButton.setAttribute("id", "replay-button");
+    replayButton.innerHTML = `Play Again`;
+    pokemonsContainer.appendChild(replayButton);
+    replayButton.addEventListener("click", () => this.endBattle());
   }
 
-  closeBattle() {
+  endBattle() {
     const parent = document.getElementById("pokemons-container");
     const canvas = this.canvas.node;
-    const button = document.getElementById("close-button");
+    const button = document.getElementById("replay-button");
     parent.removeChild(canvas);
     parent.removeChild(button);
   }

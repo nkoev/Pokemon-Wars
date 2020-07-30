@@ -1,6 +1,6 @@
 export const battleEvent = (callback) => {
-  const avatars = document.getElementsByClassName("avatar");
-  for (let avatar of avatars) {
-    avatar.addEventListener("click", callback);
+  const sprites = document.getElementsByClassName("sprite");
+  for (let sprite of sprites) {
+    sprite.addEventListener("click", callback);
   }
 };
