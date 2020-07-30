@@ -3,7 +3,7 @@ import { baseUrl } from "./common.js";
 
 export const getPokemons = async () => {
   const pokemonsList = [];
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 30; i++) {
     const pokemonData = await fetch(baseUrl + i);
     pokemonsList.push(await pokemonData.json());
   }

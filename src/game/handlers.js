@@ -1,14 +1,14 @@
 import { Battle } from "./battle.js";
 import { listPokemon } from "./views.js";
 import { Canvas } from "./canvas.js";
-import { pokemonsContainer, backgroundUrl } from "./common.js";
+import { backgroundUrl, replayButton, battleCanvas } from "./common.js";
 import { getPokemons } from "./data-service.js";
 
 export const displayPokemons = async () => {
   (await getPokemons()).forEach(listPokemon);
 };
 
-export const battleHandler = async (event) => {
+export const startBattle = async (event) => {
   const pokemonsList = await getPokemons();
   const hero = pokemonsList[+event.target.id];
   const enemy = selectOponent(+event.target.id, pokemonsList);
@@ -16,15 +16,18 @@ export const battleHandler = async (event) => {
   const background = new Image();
   background.setAttribute("src", backgroundUrl);
   background.onload = () => {
-    const canvas = new Canvas(background);
-    canvas.appendTo(pokemonsContainer);
-    canvas.setAttribute("id", "battle");
-
+    battleCanvas.style.display = "inline-block";
+    const canvas = new Canvas(battleCanvas, background);
     const battle = new Battle(hero, enemy, canvas);
 
     battle.displayBattle();
-    setTimeout(() => battle.startBattle(), 1000);
+    setTimeout(() => battle.run(), 1000);
   };
+};
+
+export const endBattle = () => {
+  battleCanvas.style.display = "none";
+  replayButton.style.display = "none";
 };
 
 const selectOponent = (heroId, pokemonsList) => {

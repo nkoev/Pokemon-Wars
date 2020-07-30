@@ -1,6 +1,6 @@
-import { displayPokemons } from "./game/handlers.js";
-import { battleHandler } from "./game/handlers.js";
-import { battleEvent } from "./game/events.js";
+import { displayPokemons, startBattle, endBattle } from "./game/handlers.js";
+import { battleEvent, replayEvent } from "./game/events.js";
 
 displayPokemons();
-setTimeout(() => battleEvent(battleHandler), 1000);
+setTimeout(() => battleEvent(startBattle), 500);
+replayEvent(endBattle);

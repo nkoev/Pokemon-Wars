@@ -1,10 +1,9 @@
 export class Canvas {
-  canvas = document.createElement("canvas");
-  ctx = this.canvas.getContext("2d");
-
-  constructor(background) {
+  constructor(node, background) {
+    this.node = node;
     this.background = background;
-    this.ctx.drawImage(background, 0, 0, this.canvas.width, this.canvas.height);
+    this.ctx = node.getContext("2d");
+    this.ctx.drawImage(background, 0, 0, node.width, node.height);
   }
 
   appendTo(parent) {
@@ -24,13 +23,17 @@ export class Canvas {
   }
 
   get width() {
-    return this.canvas.width;
+    return this.node.width;
   }
   get height() {
-    return this.canvas.height;
+    return this.node.height;
   }
-  get node() {
-    return this.canvas;
+
+  save() {
+    this.ctx.save();
+  }
+  restore() {
+    this.ctx.restore();
   }
 
   drawImage(image, x, y) {
@@ -45,13 +48,13 @@ export class Canvas {
   }
 
   clear() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.node.width, this.node.height);
     this.ctx.drawImage(
       this.background,
       0,
       0,
-      this.canvas.width,
-      this.canvas.height
+      this.node.width,
+      this.node.height
     );
   }
 }

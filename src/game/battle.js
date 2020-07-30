@@ -1,4 +1,4 @@
-import { pokemonsContainer } from "./common.js";
+import { replayButton } from "./common.js";
 
 export class Battle {
   constructor(hero, enemy, canvas) {
@@ -95,22 +95,10 @@ export class Battle {
       "30px Arial",
       "center"
     );
-    const replayButton = document.createElement("button");
-    replayButton.setAttribute("id", "replay-button");
-    replayButton.innerHTML = `Play Again`;
-    pokemonsContainer.appendChild(replayButton);
-    replayButton.addEventListener("click", () => this.endBattle());
+    replayButton.style.display = "inline-block";
   }
 
-  endBattle() {
-    const parent = document.getElementById("pokemons-container");
-    const canvas = this.canvas.node;
-    const button = document.getElementById("replay-button");
-    parent.removeChild(canvas);
-    parent.removeChild(button);
-  }
-
-  startBattle() {
+  run() {
     if (this.hero.currentHP === 0) {
       this.displayBattle();
       this.displayResult("You loose!");
@@ -122,31 +110,19 @@ export class Battle {
       return;
     }
     if (this.attacker === this.enemy) {
-      console.log("enemy attack");
       const damage = this.hero.applyAttack(this.enemy.attack);
       this.attacker = this.hero;
       if (damage > 0) {
-        this.hero.currentHP -= damage;
-        if (this.hero.currentHP < 0) {
-          this.hero.currentHP = 0;
-        }
-        console.log(this.hero.currentHP);
         this.enemyAttack();
       } else {
-        this.startBattle();
+        this.run();
       }
     } else {
-      console.log("hero attack");
       const damage = this.enemy.applyAttack(this.hero.attack);
       if (damage > 0) {
-        this.enemy.currentHP -= damage;
-        if (this.enemy.currentHP < 0) {
-          this.enemy.currentHP = 0;
-        }
-        console.log(this.enemy.currentHP);
         this.heroAttack();
       } else {
-        this.startBattle();
+        this.run();
       }
     }
   }
@@ -161,7 +137,7 @@ export class Battle {
       setTimeout(() => {
         clearInterval(blinking);
         this.x1 = 10;
-        this.startBattle();
+        this.run();
       }, 2000);
     }
   }
@@ -176,7 +152,7 @@ export class Battle {
       setTimeout(() => {
         clearInterval(blinking);
         this.x2 = 180;
-        this.startBattle();
+        this.run();
       }, 2000);
     }
   }
