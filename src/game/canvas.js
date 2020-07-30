@@ -1,54 +1,28 @@
+import { context } from "./common.js";
+
 export class Canvas {
-  constructor(node, background) {
-    this.node = node;
+  constructor(heroName, enemyName, background) {
+    this.node = document.getElementById("battle");
+    this.ctx = this.node.getContext("2d");
+    this.width = this.node.width;
+    this.height = this.node.height;
+    this.heroName = heroName;
+    this.enemyName = enemyName;
     this.background = background;
-    this.ctx = node.getContext("2d");
-    this.ctx.drawImage(background, 0, 0, node.width, node.height);
   }
 
-  appendTo(parent) {
-    parent.appendChild(this.node);
+  display() {
+    this.node.style.display = "inline-block";
   }
-
-  setAttribute(name, value) {
-    this.node.setAttribute(name, value);
+  hide() {
+    this.node.style.display = "none";
   }
-
-  drawLine(fromX, fromY, toX, toY, color = "#32CD32") {
-    this.ctx.strokeStyle = color;
-    this.ctx.beginPath();
-    this.ctx.moveTo(fromX, fromY);
-    this.ctx.lineTo(toX, toY);
-    this.ctx.stroke();
-  }
-
-  get width() {
-    return this.node.width;
-  }
-  get height() {
-    return this.node.height;
-  }
-
-  save() {
-    this.ctx.save();
-  }
-  restore() {
-    this.ctx.restore();
-  }
-
-  drawImage(image, x, y) {
-    this.ctx.drawImage(image, x, y);
-  }
-
-  insertText(text, x, y, color, size, align) {
-    this.ctx.textAlign = align;
-    this.ctx.font = size;
-    this.ctx.fillStyle = color;
-    this.ctx.fillText(text, x, y);
-  }
-
   clear() {
     this.ctx.clearRect(0, 0, this.node.width, this.node.height);
+  }
+
+  drawStatics() {
+    this.ctx.save();
     this.ctx.drawImage(
       this.background,
       0,
@@ -56,5 +30,80 @@ export class Canvas {
       this.node.width,
       this.node.height
     );
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(this.heroName, this.node.width / 4, 20);
+    this.ctx.fillText(this.enemyName, (this.node.width / 4) * 3, 20);
+    this.ctx.restore();
+  }
+
+  drawResults(isWinner) {
+    this.ctx.save();
+    this.ctx.textAlign = "center";
+    this.ctx.font = "30px Arial";
+    isWinner
+      ? ((this.ctx.fillStyle = "yellow"),
+        this.ctx.fillText("You win!", this.node.width / 2, 70))
+      : ((this.ctx.fillStyle = "red"),
+        this.ctx.fillText("You loose!", this.node.width / 2, 70));
+    this.ctx.restore();
+  }
+}
+
+export class HealthBar {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.x1 = x;
+    this.y1 = y;
+    this.width = width;
+    this.height = height;
+  }
+
+  draw() {
+    context.save();
+    context.fillStyle = "#32CD32";
+    context.fillRect(this.x, this.y, this.width, this.height);
+    context.restore();
+  }
+
+  update(width) {
+    this.width = width;
+  }
+}
+
+export class Sprite {
+  constructor(x, y, image) {
+    this.x = x;
+    this.y = y;
+    this.x1 = x;
+    this.image = image;
+    this.showImage = false;
+  }
+
+  draw() {
+    context.save();
+    context.drawImage(this.image, this.x, this.y);
+    context.restore();
+  }
+
+  drawBlinking() {
+    if (this.showImage) {
+      context.save();
+      context.drawImage(this.image, this.x, this.y);
+      context.restore();
+    }
+    this.showImage = !this.showImage;
+  }
+
+  update(step) {
+    this.x += step;
+  }
+
+  restoreImage() {
+    this.showImage = false;
+  }
+
+  restorePosition() {
+    this.x = this.x1;
   }
 }
