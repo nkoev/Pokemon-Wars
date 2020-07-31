@@ -110,6 +110,7 @@ export class Battle {
       this.enemyHealthBar.draw();
       requestAnimationFrame(() => this.enemyAttack());
     } else {
+      hitSound.play();
       const blinking = setInterval(() => {
         this.canvas.clear();
         this.canvas.drawStatics();
