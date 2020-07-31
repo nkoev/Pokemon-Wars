@@ -48,18 +48,11 @@ export class Battle {
     if (this.attacker === this.enemy) {
       const damage = this.hero.applyAttack(this.enemy.attack);
       this.attacker = this.hero;
-      if (damage > 0) {
-        this.enemyAttack();
-      } else {
-        this.run();
-      }
+      damage ? this.enemyAttack() : this.run();
     } else {
       const damage = this.enemy.applyAttack(this.hero.attack);
-      if (damage > 0) {
-        this.heroAttack();
-      } else {
-        this.run();
-      }
+      this.attacker = this.enemy;
+      damage ? this.heroAttack() : this.run();
     }
   }
 
