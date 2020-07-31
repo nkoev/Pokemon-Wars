@@ -1,4 +1,9 @@
-# Boost Interview Task :rocket: 
+
+# Pokemon Wars
+
+<h4>This project uses ES modules.</h4> 
+<h4>To run it in the browser you need live-server or similar.</h4>
+
 
 ## Instructions
 
