@@ -6,7 +6,7 @@ import {
   removeCanvas,
   removeReplayButton,
 } from "./views.js";
-import { backgroundUrl } from "./common.js";
+import { backgroundUrl, music } from "./common.js";
 import { getPokemons } from "./data-service.js";
 import { Statics } from "./canvas-elements/statics.js";
 import { Sprite } from "./canvas-elements/sprite.js";
@@ -20,8 +20,9 @@ export const startBattle = async (event) => {
   const pokemonsList = await getPokemons();
   const heroId = +event.target.id;
   const hero = pokemonsList[heroId];
-  const enemyId = Math.floor(Math.random() * pokemonsList.length - 1);
-  const enemy = pokemonsList.filter(({ id }) => id !== heroId)[enemyId];
+  const remainingPokemons = pokemonsList.filter(({ id }) => id !== heroId);
+  const enemyId = Math.floor(Math.random() * remainingPokemons.length);
+  const enemy = remainingPokemons[enemyId];
 
   showCanvas();
 
@@ -42,7 +43,9 @@ export const startBattle = async (event) => {
       heroHealthBar,
       enemyHealthBar
     );
-
+    music.load();
+    music.volume = 0.05;
+    music.play();
     battle.init();
   };
 };
@@ -52,6 +55,7 @@ export const finishBattle = () => {
 };
 
 export const replayBattle = () => {
+  music.pause();
   removeCanvas();
   removeReplayButton();
 };

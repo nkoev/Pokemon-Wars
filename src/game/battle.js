@@ -1,5 +1,6 @@
 import { finishBattle, replayBattle } from "./handlers.js";
 import { replayEvent } from "./events.js";
+import { hitSound } from "./common.js";
 
 export class Battle {
   constructor(
@@ -73,6 +74,7 @@ export class Battle {
       this.enemyHealthBar.draw();
       requestAnimationFrame(() => this.heroAttack());
     } else {
+      hitSound.play();
       const blinking = setInterval(() => {
         this.canvas.clear();
         this.canvas.drawStatics();

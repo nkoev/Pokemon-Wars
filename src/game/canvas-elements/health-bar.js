@@ -8,11 +8,17 @@ export class HealthBar {
     this.y1 = y;
     this.width = width;
     this.height = height;
+    this.initWidth = width;
   }
 
   draw() {
     this.ctx.save();
-    this.ctx.fillStyle = "#32CD32";
+    this.ctx.fillStyle =
+      this.width / this.initWidth <= 0.1
+        ? "red"
+        : this.width / this.initWidth >= 0.5
+        ? "#32CD32"
+        : "yellow";
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
     this.ctx.restore();
   }
