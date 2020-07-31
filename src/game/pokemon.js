@@ -5,7 +5,7 @@ export class Pokemon {
     this.frontSprite.src = data.sprites.front_default;
     this.backSprite = new Image();
     this.backSprite.src = data.sprites.back_default;
-    this.name = data.name;
+    this.name = data.name.toUpperCase();
     this.ability = data.abilities.find(
       (ability) => !ability.is_hiden
     ).ability.name;
