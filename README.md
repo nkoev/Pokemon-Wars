@@ -2,8 +2,6 @@
 
 <h4>This project makes use of ES modules.</h4> 
 <h4>To run it in the browser locally you need live-server or similar.</h4>
-<h4>OR</h4>
-<h4>https://nkoev.gitlab.io/pokemon-wars/</h4>
 
 ## Instructions
 
