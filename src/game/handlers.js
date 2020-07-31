@@ -1,8 +1,16 @@
 import { Battle } from "./battle.js";
-import { listPokemon } from "./views.js";
-import { backgroundUrl, replayButton, battleCanvas } from "./common.js";
+import {
+  listPokemon,
+  showReplayButton,
+  showCanvas,
+  removeCanvas,
+  removeReplayButton,
+} from "./views.js";
+import { backgroundUrl } from "./common.js";
 import { getPokemons } from "./data-service.js";
-import { Canvas, Sprite, HealthBar } from "./canvas.js";
+import { Statics } from "./canvas-elements/statics.js";
+import { Sprite } from "./canvas-elements/sprite.js";
+import { HealthBar } from "./canvas-elements/health-bar.js";
 
 export const displayPokemons = async () => {
   (await getPokemons()).forEach(listPokemon);
@@ -10,8 +18,12 @@ export const displayPokemons = async () => {
 
 export const startBattle = async (event) => {
   const pokemonsList = await getPokemons();
-  const hero = pokemonsList[+event.target.id];
-  const enemy = selectOponent(+event.target.id, pokemonsList);
+  const heroId = +event.target.id;
+  const hero = pokemonsList[heroId];
+  const enemyId = Math.floor(Math.random() * pokemonsList.length - 1);
+  const enemy = pokemonsList.filter(({ id }) => id !== heroId)[enemyId];
+
+  showCanvas();
 
   const background = new Image();
   background.setAttribute("src", backgroundUrl);
@@ -20,28 +32,26 @@ export const startBattle = async (event) => {
     const enemySprite = new Sprite(190, 50, enemy.frontSprite);
     const heroHealthBar = new HealthBar(50, 30, 50, 5);
     const enemyHealthBar = new HealthBar(200, 30, 50, 5);
-    const canvas = new Canvas(hero.name, enemy.name, background);
+    const statics = new Statics(hero.name, enemy.name, background);
     const battle = new Battle(
       hero,
       enemy,
-      canvas,
+      statics,
       heroSprite,
       enemySprite,
       heroHealthBar,
       enemyHealthBar
     );
+
     battle.init();
   };
 };
 
-export const endBattle = () => {
-  battleCanvas.style.display = "none";
-  replayButton.style.display = "none";
+export const finishBattle = () => {
+  showReplayButton();
 };
 
-const selectOponent = (heroId, pokemonsList) => {
-  const remainingPokemons = pokemonsList.filter(({ id }) => id !== heroId);
-  return remainingPokemons[
-    Math.floor(Math.random() * remainingPokemons.length)
-  ];
+export const replayBattle = () => {
+  removeCanvas();
+  removeReplayButton();
 };

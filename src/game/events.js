@@ -1,5 +1,3 @@
-import { replayButton } from "./common.js";
-
 export const battleEvent = (callback) => {
   const sprites = document.getElementsByClassName("sprite");
   for (let sprite of sprites) {
@@ -8,5 +6,6 @@ export const battleEvent = (callback) => {
 };
 
 export const replayEvent = (callback) => {
+  const replayButton = document.getElementById("replay-button");
   replayButton.addEventListener("click", callback);
 };

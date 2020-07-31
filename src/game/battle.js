@@ -1,3 +1,6 @@
+import { finishBattle, replayBattle } from "./handlers.js";
+import { replayEvent } from "./events.js";
+
 export class Battle {
   constructor(
     hero,
@@ -20,7 +23,6 @@ export class Battle {
 
   init() {
     this.canvas.clear();
-    this.canvas.display();
     this.canvas.drawStatics();
     this.heroSprite.draw();
     this.enemySprite.draw();
@@ -32,10 +34,14 @@ export class Battle {
   run() {
     if (this.hero.currentHP === 0) {
       this.canvas.drawResults(false);
+      finishBattle();
+      replayEvent(replayBattle);
       return;
     }
     if (this.enemy.currentHP === 0) {
       this.canvas.drawResults(true);
+      finishBattle();
+      replayEvent(replayBattle);
       return;
     }
     if (this.attacker === this.enemy) {
@@ -61,7 +67,7 @@ export class Battle {
       this.canvas.clear();
       this.canvas.drawStatics();
       this.heroSprite.draw();
-      this.heroSprite.update(1);
+      this.heroSprite.move(1);
       this.enemySprite.draw();
       this.heroHealthBar.draw();
       this.enemyHealthBar.draw();
@@ -97,7 +103,7 @@ export class Battle {
       this.canvas.drawStatics();
       this.heroSprite.draw();
       this.enemySprite.draw();
-      this.enemySprite.update(-1);
+      this.enemySprite.move(-1);
       this.heroHealthBar.draw();
       this.enemyHealthBar.draw();
       requestAnimationFrame(() => this.enemyAttack());
