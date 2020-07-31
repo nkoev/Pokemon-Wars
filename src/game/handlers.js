@@ -11,6 +11,7 @@ import { getPokemons } from "./data-service.js";
 import { Statics } from "./canvas-elements/statics.js";
 import { Sprite } from "./canvas-elements/sprite.js";
 import { HealthBar } from "./canvas-elements/health-bar.js";
+import { replayEvent } from "./events.js";
 
 export const displayPokemons = async () => {
   (await getPokemons()).forEach(listPokemon);
@@ -52,6 +53,7 @@ export const startBattle = async (event) => {
 
 export const finishBattle = () => {
   showReplayButton();
+  replayEvent(replayBattle);
 };
 
 export const replayBattle = () => {

@@ -1,12 +1,11 @@
-import { finishBattle, replayBattle } from "./handlers.js";
-import { replayEvent } from "./events.js";
+import { finishBattle } from "./handlers.js";
 import { hitSound } from "./common.js";
 
 export class Battle {
   constructor(
     hero,
     enemy,
-    canvas,
+    statics,
     heroSprite,
     enemySprite,
     heroHealthBar,
@@ -14,7 +13,7 @@ export class Battle {
   ) {
     this.hero = hero;
     this.enemy = enemy;
-    this.canvas = canvas;
+    this.statics = statics;
     this.heroSprite = heroSprite;
     this.enemySprite = enemySprite;
     this.heroHealthBar = heroHealthBar;
@@ -23,8 +22,8 @@ export class Battle {
   }
 
   init() {
-    this.canvas.clear();
-    this.canvas.drawStatics();
+    this.statics.clearCanvas();
+    this.statics.draw();
     this.heroSprite.draw();
     this.enemySprite.draw();
     this.heroHealthBar.draw();
@@ -34,15 +33,13 @@ export class Battle {
 
   run() {
     if (this.hero.currentHP === 0) {
-      this.canvas.drawResults(false);
+      this.statics.drawResults(false);
       finishBattle();
-      replayEvent(replayBattle);
       return;
     }
     if (this.enemy.currentHP === 0) {
-      this.canvas.drawResults(true);
+      this.statics.drawResults(true);
       finishBattle();
-      replayEvent(replayBattle);
       return;
     }
     if (this.attacker === this.enemy) {
@@ -57,9 +54,9 @@ export class Battle {
   }
 
   heroAttack() {
-    if (this.heroSprite.x < this.canvas.width / 3) {
-      this.canvas.clear();
-      this.canvas.drawStatics();
+    if (this.heroSprite.x < this.statics.width / 3) {
+      this.statics.clearCanvas();
+      this.statics.draw();
       this.heroSprite.draw();
       this.heroSprite.move(1);
       this.enemySprite.draw();
@@ -69,8 +66,8 @@ export class Battle {
     } else {
       hitSound.play();
       const blinking = setInterval(() => {
-        this.canvas.clear();
-        this.canvas.drawStatics();
+        this.statics.clearCanvas();
+        this.statics.draw();
         this.heroSprite.draw();
         this.enemySprite.drawBlinking();
         this.heroHealthBar.draw();
@@ -81,8 +78,8 @@ export class Battle {
         this.enemySprite.restoreImage();
         this.heroSprite.restorePosition();
         this.enemyHealthBar.update(this.enemy.currentHP / this.enemy.hpCoeff);
-        this.canvas.clear();
-        this.canvas.drawStatics();
+        this.statics.clearCanvas();
+        this.statics.draw();
         this.heroSprite.draw();
         this.enemySprite.draw();
         this.heroHealthBar.draw();
@@ -93,9 +90,9 @@ export class Battle {
   }
 
   enemyAttack() {
-    if (this.enemySprite.x > this.canvas.width / 3) {
-      this.canvas.clear();
-      this.canvas.drawStatics();
+    if (this.enemySprite.x > this.statics.width / 3) {
+      this.statics.clearCanvas();
+      this.statics.draw();
       this.heroSprite.draw();
       this.enemySprite.draw();
       this.enemySprite.move(-1);
@@ -105,8 +102,8 @@ export class Battle {
     } else {
       hitSound.play();
       const blinking = setInterval(() => {
-        this.canvas.clear();
-        this.canvas.drawStatics();
+        this.statics.clearCanvas();
+        this.statics.draw();
         this.enemySprite.draw();
         this.heroSprite.drawBlinking();
         this.heroHealthBar.draw();
@@ -117,8 +114,8 @@ export class Battle {
         this.enemySprite.restorePosition();
         this.heroSprite.restoreImage();
         this.heroHealthBar.update(this.hero.currentHP / this.hero.hpCoeff);
-        this.canvas.clear();
-        this.canvas.drawStatics();
+        this.statics.clearCanvas();
+        this.statics.draw();
         this.heroSprite.draw();
         this.enemySprite.draw();
         this.heroHealthBar.draw();
