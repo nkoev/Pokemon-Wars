@@ -14,7 +14,7 @@ import { HealthBar } from "./canvas-elements/health-bar.js";
 import { replayEvent } from "./events.js";
 
 export const displayPokemons = async () => {
-  (await getPokemons()).forEach(listPokemon);
+  return (await getPokemons()).forEach(listPokemon);
 };
 
 export const startBattle = async (event) => {
