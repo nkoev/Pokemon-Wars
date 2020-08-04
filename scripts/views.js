@@ -37,6 +37,9 @@ export const showReplayButton = () => {
 export const showCanvas = () => {
   const canvas = document.createElement("canvas");
   canvas.setAttribute("id", "battle");
+  const shader = document.createElement("div");
+  shader.setAttribute("id", "shader");
+  pokemonsContainer.appendChild(shader);
   pokemonsContainer.appendChild(canvas);
 };
 
@@ -47,5 +50,7 @@ export const removeReplayButton = () => {
 
 export const removeCanvas = () => {
   const canvas = document.getElementById("battle");
+  const shader = document.getElementById("shader");
+  pokemonsContainer.removeChild(shader);
   pokemonsContainer.removeChild(canvas);
 };
